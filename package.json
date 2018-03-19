@@ -1,0 +1,23 @@
+{
+  "name": "beta-cli",
+  "version": "1.0.0",
+  "description": "CLI Utilities in Node",
+  "main": "index.js",
+  "repository": "git@github.com:Icemanbeta/beta-cli.git",
+  "author": "chiukk1@gmail.com",
+  "license": "MIT",
+  "private": false,
+  "preferGlobal": true,
+  "bin": "./index.js",
+  "dependencies": {
+    "commander": "^2.15.0",
+    "write-pkg": "^3.1.0"
+  },
+  "scripts": {
+    "sync": "npx babel-node ./runner sync"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
+  }
+}
