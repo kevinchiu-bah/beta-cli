@@ -9,8 +9,13 @@ const tasks = {
   sync,
 }
 
-program.version(settings.version)
+program
+  .version(settings.version)
   .arguments('<cmd>')
+//.command('sync', 'Sync on \'scripts\' in package.json')
   .action(cmd => {
-    tasks[cmd]();
-  }).parse(process.argv);
+    const task = tasks[cmd];
+    task ? task() : program.help();
+  })
+
+program.parse(process.argv);
