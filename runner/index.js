@@ -12,7 +12,6 @@ const tasks = {
 program
   .version(settings.version)
   .arguments('<cmd>')
-//.command('sync', 'Sync on \'scripts\' in package.json')
   .action(cmd => {
     const task = tasks[cmd];
     task ? task() : program.help();
