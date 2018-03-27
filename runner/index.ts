@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-import program from 'commander';
-import process from 'process';
-import settings from '../package.json';
+import * as program from 'commander';
+import * as process from 'process';
+import * as settings from '../package.json';
 
-import sync from './sync';
+import { sync } from './sync';
 
 const tasks = {
   sync,

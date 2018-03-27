@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-import writePkg from 'write-pkg'
-import settings from '../package.json';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as writePkg from 'write-pkg'
+import * as settings from '../package.json';
 
 const config = {
   src: './runner',
@@ -18,7 +18,8 @@ const config = {
 };
 
 const getScriptName = (script) => script.replace(/(.+)\.js$/, '$1');
-const sync = () => {
+
+export const sync = () => {
   const pattern = new RegExp(`^(.+)\.${config.extensions.join('|')}$`),
         scripts = fs
           .readdirSync(config.src)
@@ -49,5 +50,3 @@ const sync = () => {
     console.info('Your package.json is update to date!');
   }
 };
-
-export default sync;

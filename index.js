@@ -1,3 +1,3 @@
 #!/usr/bin/env node
-require('@babel/register');
+require('ts-node/register');
 require('./cli');

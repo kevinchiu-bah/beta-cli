@@ -1,9 +1,10 @@
 #! /usr/bin/env node
-import glob from 'glob';
-import fs from 'fs';
-import path from 'path';
-import process from 'process';
-import colors from 'colors';
+import * as colors from 'colors';
+import * as fs from 'fs';
+import * as glob from 'glob';
+import * as path from 'path';
+import * as process from 'process';
+import { encode } as process from 'encode';
 
 const mv = (source, target) => {
   fs.renameSync(source, target);
@@ -48,7 +49,8 @@ const bundle = (dirname, program) => {
     ext = path.extname(source);
     locale = 'en';
     target = `${basePath}/${prefix}.${locale}${ext}`;
-    mv(source, target);
+    encode(target);
+    fs.unlinkSync(source);
   });
 
   files = glob.sync('*.{mp4,avi,mkv}', options);

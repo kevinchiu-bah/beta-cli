@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": [
+      "es2017",
+      "es2015",
+      "es5",
+      "es6",
+      "dom",
+      "scripthost"
+    ],
+    "types": [
+      "node",
+      "lodash"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "outDir": "./",
+    "sourceMap": false,
+    "strict": true
+  },
+  "include": [
+    "typings/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

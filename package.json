@@ -7,23 +7,26 @@
   "author": "chiukk1@gmail.com",
   "license": "MIT",
   "private": false,
-  "preferGlobal": true,
   "dependencies": {
-    "@babel/cli": "^7.0.0-beta.42",
-    "@babel/core": "^7.0.0-beta.42",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.42",
-    "@babel/plugin-transform-spread": "^7.0.0-beta.42",
-    "@babel/preset-env": "^7.0.0-beta.42",
-    "@babel/register": "^7.0.0-beta.42",
+    "@types/commander": "^2.12.2",
+    "@types/es6-shim": "^0.31.36",
+    "@types/lodash": "^4.14.106",
+    "@types/node": "^9.6.0",
+    "clear": "^0.1.0",
     "colors": "^1.2.1",
     "commander": "^2.15.0",
     "glob": "^7.1.2",
+    "lodash": "^4.17.5",
     "shelljs": "^0.8.1",
+    "typescript": "^2.7.2",
     "write-pkg": "^3.1.0"
   },
+  "devDependencies": {
+    "ts-node": "^5.0.1"
+  },
   "scripts": {
-    "sync": "npx babel-node ./runner sync",
-    "start": "npx babel-node ./cli"
+    "sync": "npx ts-node ./runner sync",
+    "start": "npx ts-node ./cli"
   },
   "bin": {
     "beta": "index.js"
