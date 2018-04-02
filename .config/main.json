@@ -1,0 +1,7 @@
+{
+  "commands": {
+    "encode": "Sanitize text encoding to UTF-8 automaticaly.",
+    "bundle": "Bundle and rename media directory of video, subtitles, and cover art.",
+    "help": "Display help"
+  }
+}

@@ -1,6 +1,7 @@
 #! /usr/bin/env node
-import * as colors from 'colors';
+import * as chalk from 'chalk';
 import * as fs from 'fs';
+import * as inquirer from 'inquirer';
 import * as process from 'process';
 import { exec, exit } from 'shelljs';
 import { merge } from 'lodash';
@@ -17,17 +18,17 @@ const options = {
 
 const error = (name) => {
   const message = ([
-    colors.red('[Error]'),
-    colors.cyan(name),
-    colors.grey('is a dependency and needs to be available on your PATH.'),
-    colors.yellow('Exit...')
+    chalk.red('[Error]'),
+    chalk.cyan(name),
+    chalk.grey('is a dependency and needs to be available on your PATH.'),
+    chalk.yellow('Exit...')
   ]).join(' ');
 
   console.log(message);
   exit(1);
 };
 
-export const encode = (src) => {
+const encode = (src) => {
   const file = fs.readFileSync(src);
 
   exec('command -v uchardet', options.exec, (code, stdout, stderr) => {
@@ -51,7 +52,9 @@ export const encode = (src) => {
         fs.writeFileSync(src, stdout);
       });
     } else {
-      console.log(`${colors.red('[Error]')} ${colors.yellow(stderr)}`);
+      console.log(`${chalk.red('[Error]')} ${chalk.chalk(stderr)}`);
     }
   });
 };
+
+export default encode;

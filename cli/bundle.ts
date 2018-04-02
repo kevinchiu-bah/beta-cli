@@ -1,22 +1,21 @@
 #! /usr/bin/env node
-import * as colors from 'colors';
+import * as chalk from 'chalk';
 import * as fs from 'fs';
 import * as glob from 'glob';
+import * as inquirer from 'inquirer';
+import { map } from 'lodash';
 import * as path from 'path';
 import * as process from 'process';
-import { encode } from 'encode';
+import { env } from 'shelljs';
+// import { encode } from './encode';
 
 const mv = (source, target) => {
   fs.renameSync(source, target);
-  console.log(
-    `${colors.green('[Renaming]')} ${colors.gray(source)} => ${colors.cyan(target)}`
-  );
+  console.log(`${chalk.green('[Renaming]')} ${chalk.gray(source)} => ${chalk.cyan(target)}`);
 };
 
-const bundle = (dirname, program) => {
-  console.log(path.resolve(dirname));
+const bundle = (path, prefix, locale) => {
   const cwd = path.resolve(process.cwd(), dirname);
-  const prefix = program.name;
   const options = {
     cwd: cwd,
     sync: true,
@@ -28,10 +27,6 @@ const bundle = (dirname, program) => {
   let ext;
   let locale;
   let dir$;
-
-  if(!prefix) {
-    program.outputHelp();
-  }
 
   files = glob.sync('*.{jpg,jpeg.png}', options);
   files.forEach(source => {
@@ -47,7 +42,6 @@ const bundle = (dirname, program) => {
     basePath = path.dirname(path.join(cwd, source));
     source = `${basePath}/${source}`;
     ext = path.extname(source);
-    locale = 'en';
     target = `${basePath}/${prefix}.${locale}${ext}`;
     mv(source, target);
     // encode(target);
@@ -71,4 +65,39 @@ const bundle = (dirname, program) => {
   mv(cwd, dir$);
 };
 
-export default bundle;
+const init = () => {
+  inquirer.prompt([
+    {
+      name: 'prefix',
+      message: 'Enter the name of your bundle',
+      default: 'The.Bundle',
+    },
+    {
+      name: 'path',
+      message: 'Enter the path to your bundle [directory]',
+      validate: answer => !!(answer || '').length,
+    },
+    {
+      name: 'locale',
+      message: 'Enter the language suffix or your srt',
+      default: 'en',
+    }
+  ]).then(answers => {
+    const vars = answers.path.match(/\$[a-z0-9]+/i);
+
+    if(vars) {
+      vars.forEach(key => {
+        const key$ = key.replace(/^\$/, '');
+        const value$ = env[key$];
+
+        if(value$) {
+          answers.path = answers.path.replace(key, value$);
+        }
+      });
+
+      bundle(answers.path, answers.prefix, answers.locale);
+    }
+   });
+};
+
+export default init;

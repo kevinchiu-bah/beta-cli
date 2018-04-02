@@ -1,52 +1,33 @@
 #! /usr/bin/env node
-import * as colors from 'colors';
+import * as clear from 'clear';
+import * as program from 'commander';
+import * as figlet from 'figlet';
 import * as path from 'path';
 import * as process from 'process';
-import * as program from 'commander';
-
-const error = (error) => {
-  if(error) {
-    console.log(
-      colors.red(error)
-    );
-  } else {
-    program.help();
-  }
-};
+import * as config from '../.config/main.json';
+import * as settings from '../package.json';
+import { Color } from './enums';
+import { logger, help } from './helpers';
 
 program
-  .version('1.0.0')
-  .arguments('<cmd> [options] [target]')
-  .option('-i, --input [input]', 'File source path')
-  .option('-n, --name [name]', 'Name of media')
-  .action(function(cmd, target) {
-    try {
-      switch(cmd) {
-        case 'encode':
-          const encode = require('./encode').encode;
-          const file = path.resolve(process.cwd(), target);
-          encode(file);
-          break;
+  .version(settings.version)
+  .usage('<command>')
+  .arguments('<command>')
+  .action(command => {
+    clear();
+    logger(
+      figlet.textSync('B3T4-CLI', { horizontalLayout: 'fitted' }),
+      Color.Blue
+    );
 
-        case 'bundle':
-          const bundle = require('./bundle').default;
-          bundle(target, program);
-          break;
-
-         default:
-          error();
-       }
-     } catch(e) {
-       error(e.message);
-     }
+    if(!config.commands[command] || command === 'help') {
+      help();
+    } else {
+      const fn = require(`./${command}`).default;
+      fn();
+    }
   });
 
-program.on('--help', () => {
-  console.log('  Commands:');
-  console.log('');
-  console.log('    $ beta encode --help [Sanitize text encoding for all *.th.srt (subtitle) files]');
-  console.log('    $ beta bundle -h [Bundle and rename subtitle and cover art in directory automatically]');
-  console.log('');
-});
+program.on('--help', () => help());
 
 program.parse(process.argv);
