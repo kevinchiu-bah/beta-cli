@@ -7,6 +7,7 @@
   "author": "chiukk1@gmail.com",
   "license": "MIT",
   "private": false,
+  "gypfile": true,
   "dependencies": {
     "@types/commander": "^2.12.2",
     "@types/es6-shim": "^0.31.36",
@@ -15,14 +16,16 @@
     "clear": "^0.1.0",
     "colors": "^1.2.1",
     "commander": "^2.15.0",
+    "figlet": "^1.2.0",
     "glob": "^7.1.2",
     "lodash": "^4.17.5",
+    "nan": "^2.10.0",
     "shelljs": "^0.8.1",
-    "typescript": "^2.7.2",
     "write-pkg": "^3.1.0"
   },
   "devDependencies": {
-    "ts-node": "^5.0.1"
+    "ts-node": "^5.0.1",
+    "typescript": "^2.8.1"
   },
   "scripts": {
     "sync": "npx ts-node ./runner sync",
