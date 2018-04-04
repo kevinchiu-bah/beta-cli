@@ -14,7 +14,7 @@ const mv = (source, target) => {
   console.log(`${chalk.green('[Renaming]')} ${chalk.gray(source)} => ${chalk.cyan(target)}`);
 };
 
-const bundle = (path, prefix, locale) => {
+const bundle = (dirname, prefix, locale) => {
   const cwd = path.resolve(process.cwd(), dirname);
   const options = {
     cwd: cwd,
@@ -97,7 +97,7 @@ const init = () => {
 
       bundle(answers.path, answers.prefix, answers.locale);
     }
-   });
+   }).catch((e) => { console.log(e); });
 };
 
 export default init;
