@@ -11,7 +11,8 @@
     ],
     "types": [
       "node",
-      "lodash"
+      "lodash",
+      "types",
     ],
     "allowSyntheticDefaultImports": true,
     "declaration": true,
