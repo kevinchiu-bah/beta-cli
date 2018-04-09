@@ -1,18 +1,15 @@
 #! /usr/bin/env node
-import * as chalk from 'chalk';
+import { Chalk } from 'chalk/types';
 import * as fs from 'fs';
 import * as glob from 'glob';
 import * as inquirer from 'inquirer';
 import { isNil, map, pick } from 'lodash';
 import * as path from 'path';
 import * as process from 'process';
-import { env, exec, ls } from 'shelljs';
-// import { encode } from './encode';
+import { exec, ls } from 'shelljs';
+import { echo } from './helpers';
 
-const mv = (source, target) => {
-  fs.renameSync(source, target);
-  console.log(`${chalk.green('[Renaming]')} ${chalk.gray(source)} => ${chalk.cyan(target)}`);
-};
+// import { encode } from './encode';
 
 interface Options {
   prefix?: string;
@@ -21,10 +18,16 @@ interface Options {
 };
 
 interface DependencyOptions {
-  glob: G.IOptions,
+  glob: any,
 };
 
-class Bundle {
+const chalk: Chalk = require('chalk');
+const mv = (source, target) => {
+  fs.renameSync(source, target);
+  console.log(`${chalk.green('[Renaming]')} ${chalk.gray(source)} => ${chalk.cyan(target)}`);
+};
+
+export class Bundle {
   private _source;
   private _prefix;
   private _locale;
@@ -65,7 +68,7 @@ class Bundle {
     return this._prefix;
   }
 
-  set prefix(prefix = 'en') {
+  set prefix(prefix: string) {
     if(!isNil(prefix)) {
       this._prefix = prefix;
     }
@@ -78,7 +81,7 @@ class Bundle {
     return this._locale;
   }
 
-  set locale(locale: string = null) {
+  set locale(locale: string) {
     if(!isNil(locale)) {
       this._locale = locale;
     }
@@ -95,7 +98,7 @@ class Bundle {
   /**
    * [Getters/Setters] @options
    */
-  set options(options: Options = {}) {
+  set options(options: Options) {
     const keys = [
       'source',
       'prefix',
@@ -105,6 +108,10 @@ class Bundle {
     map(pick(options, keys), (value, key) => {
       this[key] = value;
     });
+  }
+
+  resolve(to: string = './') {
+    return path.resolve(this.source, to);
   }
 
   _single() {
@@ -161,7 +168,6 @@ class Bundle {
     process.exit();
   }
 
-
   run() {
     glob('*.{mp4,avi,mkv}', (error, files) => {
       switch(files.length) {
@@ -200,31 +206,11 @@ const init = () => {
       default: 'en',
     }
   ]).then(params => {
-    const bundle: Bundle;
-    const vars = params.path.match(/\$[a-z0-9]+/ig);
-    const options: ExecOptions = {
-      silent: true,
-    };
+    let bundle: Bundle;
+    let paths: Array<string>;
 
-    if(vars) {
-      vars.forEach(key => {
-        const key$ = key.replace(/^\$/g, '');
-        const value$ = env[key$];
-
-        if(value$) {
-          params.path = params.path.replace(key, value$);
-        }
-      });
-    }
-
-    // Santize the user's path input
-    // 1. Remove extra slashes
-    // 2. Remove trailing slashes
-    params.path = params.path
-      .replace(/\/\/+/g, '/')
-      .replace(/\/$/g, '');
-
-    const paths = glob.sync(`${params.path}/`, { absolute: true });
+    params.path = echo(params.path);
+    paths = glob.sync(`${params.path}/`, { absolute: true });
 
     if(paths.length) {
       params.path = paths[0];

@@ -11,8 +11,10 @@
   "dependencies": {
     "@types/commander": "^2.12.2",
     "@types/es6-shim": "^0.31.36",
+    "@types/glob": "^5.0.35",
     "@types/lodash": "^4.14.106",
     "@types/node": "^9.6.0",
+    "@types/shelljs": "^0.7.8",
     "clear": "^0.1.0",
     "commander": "^2.15.0",
     "figlet": "^1.2.0",
@@ -24,14 +26,29 @@
     "write-pkg": "^3.1.0"
   },
   "devDependencies": {
+    "ava": "^1.0.0-beta.3",
     "ts-node": "^5.0.1",
     "typescript": "^2.8.1"
   },
   "scripts": {
     "sync": "npx ts-node ./runner sync",
+    "test": "ava-ts --verbose",
+    "test:watch": "ava-ts -- --watch --verbose",
     "start": "npx ts-node ./cli"
   },
   "bin": {
     "beta": "index.js"
+  },
+  "ava": {
+    "files": [
+      "test/**/*.ts"
+    ],
+    "sources": [
+      "test/**/*.ts"
+    ],
+    "concurrency": 5,
+    "failFast": false,
+    "failWithoutAssertions": false,
+    "compileEnhancements": false
   }
 }

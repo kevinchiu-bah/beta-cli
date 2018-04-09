@@ -1,7 +1,11 @@
-import * as chalk from 'chalk';
+import { ExecOptions } from 'shelljs';
+import { Chalk } from 'chalk/types';
 import * as _ from 'lodash';
-import * as config from '../.config/main.json';
 import { Color } from './enums';
+import { env } from 'shelljs';
+
+const config = require('../config/main.json');
+const chalk: Chalk = require('chalk');
 
 export const logger = (text: string = '', color: Color = Color.Gray) => {
   if(chalk[color]) {
@@ -11,12 +15,12 @@ export const logger = (text: string = '', color: Color = Color.Gray) => {
   }
 };
 
-const tab = '  ';
-const padding = _
+const tab: string = '  ';
+const padding: number = _
   .chain(config.commands)
   .keys()
   .map(value => value.length)
-  .reduce((a, b) => Math.max(a, b))
+  .reduce((a: number, b: number) => Math.max(a, b))
   .value() + tab.length;
 
 const pad = (text: string = '') => `${text}${' '.repeat(padding - text.length)}${tab.repeat(2)}`;
@@ -43,3 +47,30 @@ export const help = () => {
     output.join('\n')
   );
 };
+
+export const echo = (cmd: string = '') => {
+  const vars = cmd.match(/\$[a-z0-9]+/ig);
+  const options: ExecOptions = {
+    silent: true,
+  };
+
+  if(vars) {
+    vars.forEach(key => {
+      const key$ = key.replace(/^\$/g, '');
+      const value$ = env[key$];
+
+      if(value$) {
+        cmd = cmd.replace(key, value$);
+      }
+    });
+  }
+
+  // Santize the user's path input
+  // 1. Remove extra slashes
+  // 2. Remove trailing slashes
+  cmd = cmd
+    .replace(/\/\/+/g, '/')
+    .replace(/\/$/g, '');
+
+  return cmd;
+}

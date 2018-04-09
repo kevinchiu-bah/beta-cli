@@ -9,15 +9,10 @@
       "dom",
       "scripthost"
     ],
-    "types": [
-      "node",
-      "lodash",
-      "types",
-    ],
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "experimentalDecorators": true,
-    "module": "commonjs",
+    "module": "system",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "outDir": "./",
