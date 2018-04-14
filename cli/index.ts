@@ -4,7 +4,7 @@ import * as program from 'commander';
 import * as figlet from 'figlet';
 import * as path from 'path';
 import * as process from 'process';
-import * as config from '../.config/main.json';
+import * as config from '../config/main.json';
 import * as settings from '../package.json';
 import { Color } from './enums';
 import { logger, help } from './helpers';

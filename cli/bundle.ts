@@ -8,8 +8,7 @@ import * as path from 'path';
 import * as process from 'process';
 import { exec, ls } from 'shelljs';
 import { echo } from './helpers';
-
-// import { encode } from './encode';
+import { encode } from './encode';
 
 interface Options {
   prefix?: string;
@@ -140,10 +139,9 @@ export class Bundle {
       basePath = path.dirname(path.join(cwd, source));
       source = `${basePath}/${source}`;
       ext = path.extname(source);
-      target = `${basePath}/${prefix}.${locale}${ext}`;
+      target = `${basePath}/${prefix}${ext}`;
       mv(source, target);
-      // encode(target);
-      // fs.unlinkSync(source);
+      encode(target, locale);
     });
 
     files = glob.sync('*.{mp4,avi,mkv}', params.glob);

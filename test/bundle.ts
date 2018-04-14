@@ -1,7 +1,6 @@
 import anyTest, {TestInterface} from 'ava';
 import { map, merge } from 'lodash';
 import { Bundle } from '../cli/bundle';
-// import { G } from '@types/node/glob'
 
 interface Context {
   bundle?: Bundle

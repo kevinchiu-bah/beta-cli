@@ -1,19 +1,22 @@
 #! /usr/bin/env node
-import * as chalk from 'chalk';
+import { Chalk } from 'chalk/types';
 import * as fs from 'fs';
 import * as inquirer from 'inquirer';
+import * as path from 'path';
 import * as process from 'process';
-import { exec, exit } from 'shelljs';
+import * as uchardet from 'uchardet';
+
+import { Iconv } from 'iconv';
 import { merge } from 'lodash';
 
+const chalk: Chalk = require('chalk');
 const options = {
-  exec: {
-    silent: true,
+  fs: {
+    bufferSize: 64,
+    lowWaterMark: 0,
+    highWaterMark: 64,
+    autoClose: true,
   },
-
-  iconv: {
-    to: 'UTF-8',
-  }
 };
 
 const error = (name) => {
@@ -24,37 +27,44 @@ const error = (name) => {
     chalk.yellow('Exit...')
   ]).join(' ');
 
-  console.log(message);
-  exit(1);
+  process.exit(1);
 };
 
-const encode = (src) => {
-  const file = fs.readFileSync(src);
+export const encode = (src: string, locale: string = '', to: string = 'UTF-8') => {
+  const params = {
+    from: uchardet(src),
+    to,
+    locale,
+  };
 
-  exec('command -v uchardet', options.exec, (code, stdout, stderr) => {
-    if(!stdout.length) {
-      error('uchardet');
-    }
-  });
+  const iconv = new Iconv(params.from, params.to);
+  let target = `${src}.backup`;
 
-  exec('command -v iconv', options.exec, (code, stdout, stderr) => {
-    if(!stdout.length) {
-      error('uchardet');
-    }
-  });
+  const input = fs.createReadStream(src, options.fs);
+  const output = fs.createWriteStream(target, { autoClose: true });
 
-  exec(`uchardet ${src}`, options.exec, (code, stdout, stderr) => {
-    options.iconv.from = (stdout || '').replace(/\n/g, '');
+  input.pipe(iconv).pipe(output);
 
-    if(options.iconv.from.length) {
-      options.iconv.cmd = `iconv -f ${options.iconv.from} -t ${options.iconv.to} ${src}`;
-      exec(options.iconv.cmd, options.exec, (code, stdout, stderr) => {
-        fs.writeFileSync(src, stdout);
-      });
-    } else {
-      console.log(`${chalk.red('[Error]')} ${chalk.chalk(stderr)}`);
-    }
+  output.on('finish', () => {
+    let tmp;
+    let ext;
+
+    fs.unlinkSync(src);
+
+    tmp = src;
+    ext = path.extname(src);
+
+    src = target;
+    target = tmp
+      .replace(ext, `.${params.locale}${ext}`)
+      .replace(/\.\.+/, '.');
+
+    fs.renameSync(src, target);
   });
 };
 
-export default encode;
+const init =  () => {
+  encode('/Users/kchiu/www/prototypes/node-uchardet/test/resources/sample.ssa');
+};
+
+export default init;

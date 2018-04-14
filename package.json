@@ -9,7 +9,6 @@
   "private": false,
   "gypfile": true,
   "dependencies": {
-    "@types/commander": "^2.12.2",
     "@types/es6-shim": "^0.31.36",
     "@types/glob": "^5.0.35",
     "@types/lodash": "^4.14.106",
@@ -22,9 +21,8 @@
     "iconv": "^2.3.0",
     "inquirer": "^5.2.0",
     "lodash": "^4.17.5",
-    "nan": "^2.10.0",
     "shelljs": "^0.8.1",
-    "uchardet": "icemanbeta/node-uchardet",
+    "uchardet": "https://github.com/Icemanbeta/node-uchardet.git",
     "write-pkg": "^3.1.0"
   },
   "devDependencies": {
