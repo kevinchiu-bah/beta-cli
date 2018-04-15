@@ -2,7 +2,7 @@
 import { default as chalk } from 'chalk';
 import { renameSync } from 'fs';
 import * as glob from 'glob';
-import { default as inquirer }from 'inquirer';
+import { prompt }from 'inquirer';
 import { isNil, map, pick } from 'lodash';
 import { dirname, extname, resolve, join } from 'path';
 import { cwd, exit } from 'process';
@@ -141,7 +141,7 @@ export class Bundle {
       ext = extname(source);
       target = `${basePath}/${prefix}${ext}`;
       mv(source, target);
-      Encode(target, locale);
+      //Encode(target, locale);
     });
 
     files = glob.sync('*.{mp4,avi,mkv}', params.glob);
@@ -187,7 +187,7 @@ export class Bundle {
  * Initializer/Bootstrap
  */
 const init = () => {
-  inquirer.prompt([
+  prompt([
     {
       name: 'prefix',
       message: 'Enter the name of your bundle',

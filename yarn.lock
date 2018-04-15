@@ -1205,13 +1205,9 @@ extglob@^2.0.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-extsprintf@1.3.0:
+extsprintf@1.3.0, extsprintf@^1.2.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.3.0.tgz#96918440e3041a7a414f8c52e3c574eb3c3e1e05"
-
-extsprintf@^1.2.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
 
 fast-diff@^1.1.1:
   version "1.1.2"
@@ -3241,9 +3237,9 @@ typescript@^2.8.1:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.8.1.tgz#6160e4f8f195d5ba81d4876f9c0cc1fbc0820624"
 
-"uchardet@https://github.com/Icemanbeta/node-uchardet.git":
+uchardet@icemanbeta/node-uchardet:
   version "1.0.0"
-  resolved "https://github.com/Icemanbeta/node-uchardet.git#342248e16fb87ac36b1d21c3205ebaf60896aa82"
+  resolved "https://codeload.github.com/icemanbeta/node-uchardet/tar.gz/de066ea5068365efb90c456d97bdc23ecfeced64"
   dependencies:
     bindings "^1.3.0"
     node-addon-api "^1.2.0"
