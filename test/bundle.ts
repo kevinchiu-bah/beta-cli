@@ -1,4 +1,4 @@
-import anyTest, {TestInterface} from 'ava';
+import anyTest, { TestInterface } from 'ava';
 import { map, merge } from 'lodash';
 import { Bundle } from '../cli/bundle';
 

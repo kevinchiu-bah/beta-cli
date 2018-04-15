@@ -14,6 +14,7 @@
     "@types/lodash": "^4.14.106",
     "@types/node": "^9.6.0",
     "@types/shelljs": "^0.7.8",
+    "chalk": "^2.3.2",
     "clear": "^0.1.0",
     "commander": "^2.15.0",
     "figlet": "^1.2.0",
@@ -32,7 +33,7 @@
   },
   "scripts": {
     "sync": "npx ts-node ./runner sync",
-    "test": "ava-ts --verbose",
+    "test": "ava-ts",
     "test:watch": "ava-ts -- --watch --verbose",
     "start": "npx ts-node ./cli"
   },

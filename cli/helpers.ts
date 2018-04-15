@@ -1,11 +1,9 @@
-import { ExecOptions } from 'shelljs';
-import { Chalk } from 'chalk/types';
+import { default as chalk } from 'chalk';
 import * as _ from 'lodash';
+import { ExecOptions, env } from 'shelljs';
 import { Color } from './enums';
-import { env } from 'shelljs';
 
 const config = require('../config/main.json');
-const chalk: Chalk = require('chalk');
 
 export const logger = (text: string = '', color: Color = Color.Gray) => {
   if(chalk[color]) {
@@ -14,6 +12,10 @@ export const logger = (text: string = '', color: Color = Color.Gray) => {
     console.log(chalk.yellow(`Color: '${color}' is not available for logging!`));
   }
 };
+
+export const log = () => {
+
+}
 
 const tab: string = '  ';
 const padding: number = _

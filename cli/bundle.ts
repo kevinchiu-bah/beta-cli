@@ -1,14 +1,14 @@
 #! /usr/bin/env node
-import { Chalk } from 'chalk/types';
-import * as fs from 'fs';
+import { default as chalk } from 'chalk';
+import { renameSync } from 'fs';
 import * as glob from 'glob';
-import * as inquirer from 'inquirer';
+import { default as inquirer }from 'inquirer';
 import { isNil, map, pick } from 'lodash';
-import * as path from 'path';
-import * as process from 'process';
+import { dirname, extname, resolve, join } from 'path';
+import { cwd, exit } from 'process';
 import { exec, ls } from 'shelljs';
 import { echo } from './helpers';
-import { encode } from './encode';
+import { Encode } from './encode';
 
 interface Options {
   prefix?: string;
@@ -20,9 +20,9 @@ interface DependencyOptions {
   glob: any,
 };
 
-const chalk: Chalk = require('chalk');
+// const chalk: chalk = require('chalk');
 const mv = (source, target) => {
-  fs.renameSync(source, target);
+  renameSync(source, target);
   console.log(`${chalk.green('[Renaming]')} ${chalk.gray(source)} => ${chalk.cyan(target)}`);
 };
 
@@ -34,7 +34,7 @@ export class Bundle {
   private params: DependencyOptions = {
     glob: {
       sync: true,
-      cwd: process.cwd(),
+      cwd: cwd(),
     },
   };
 
@@ -110,7 +110,7 @@ export class Bundle {
   }
 
   resolve(to: string = './') {
-    return path.resolve(this.source, to);
+    return resolve(this.source, to);
   }
 
   _single() {
@@ -127,28 +127,28 @@ export class Bundle {
 
     files = glob.sync('*.{jpg,jpeg.png}', params.glob);
     files.forEach(source => {
-      basePath = path.dirname(path.join(cwd, source));
+      basePath = dirname(join(cwd, source));
       source = `${basePath}/${source}`;
-      ext = path.extname(source);
+      ext = extname(source);
       target = `${basePath}/cover${ext}`;
       mv(source, target);
     });
 
     files = glob.sync('*.{srt,ass,ssa,sub,vob}', params.glob);
     files.forEach(source => {
-      basePath = path.dirname(path.join(cwd, source));
+      basePath = dirname(join(cwd, source));
       source = `${basePath}/${source}`;
-      ext = path.extname(source);
+      ext = extname(source);
       target = `${basePath}/${prefix}${ext}`;
       mv(source, target);
-      encode(target, locale);
+      Encode(target, locale);
     });
 
     files = glob.sync('*.{mp4,avi,mkv}', params.glob);
     files.forEach(source => {
-      basePath = path.dirname(path.join(cwd, source));
+      basePath = dirname(join(cwd, source));
       source = `${basePath}/${source}`;
-      ext = path.extname(source);
+      ext = extname(source);
       target = `${basePath}/${prefix}${ext}`;
       mv(source, target);
     });
@@ -163,7 +163,7 @@ export class Bundle {
 
   _multi() {
     console.log(`${chalk.yellow('[Warning]')} This method has not been implemented yet! Exiting.`);
-    process.exit();
+    exit();
   }
 
   run() {
@@ -220,7 +220,7 @@ const init = () => {
         `${params.path} is not or does not contain any valid directories!`,
         chalk.yellow('Aborting'),
       ].join(' '));
-      process.exit();
+      exit();
     }
    }).catch((e) => {
      console.log(e);
