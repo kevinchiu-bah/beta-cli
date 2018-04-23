@@ -196,22 +196,21 @@ const init = () => {
     {
       name: 'path',
       message: 'Enter the path to your bundle [directory]',
-      validate: answer => !!(answer || '').length,
+      validate: input => !!(input || '').length,
     },
     {
       name: 'locale',
       message: 'Enter the language suffix or your srt',
       default: 'en',
     }
-  ]).then(params => {
+  ])
+  .then(params => {
     let bundle: Bundle;
     let paths: Array<string>;
 
     params.path = echo(params.path);
-    paths = glob.sync(`${params.path}/`, { absolute: true });
 
-    if(paths.length) {
-      params.path = paths[0];
+    if(params.path) {
       bundle = new Bundle(params.path, params.prefix, params.locale);
       bundle.run();
     } else {
@@ -222,7 +221,8 @@ const init = () => {
       ].join(' '));
       exit();
     }
-   }).catch((e) => {
+   })
+   .catch((e) => {
      console.log(e);
    });
 };

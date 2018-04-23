@@ -23,19 +23,19 @@
     "inquirer": "^5.2.0",
     "lodash": "^4.17.5",
     "shelljs": "^0.8.1",
-    "uchardet": "^1.5.1",
+    "uchardet": "^1.6.1",
     "write-pkg": "^3.1.0"
   },
   "devDependencies": {
     "ava": "^1.0.0-beta.3",
-    "ts-node": "^5.0.1",
+    "ts-node": "^6.0.0",
     "typescript": "^2.8.1"
   },
   "scripts": {
     "sync": "npx ts-node ./runner sync",
-    "test": "ava-ts",
-    "test:watch": "ava-ts -- --watch --verbose",
-    "start": "npx ts-node ./cli"
+    "test": "NODE_NO_WARNINGS=1 ava-ts -v",
+    "test:watch": "NODE_NO_WARNINGS=1 ava-ts -- --watch -v",
+    "start": "npx ts-node ./src"
   },
   "bin": {
     "beta": "index.js"

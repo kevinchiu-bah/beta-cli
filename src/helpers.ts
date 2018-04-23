@@ -1,6 +1,7 @@
 import { default as chalk } from 'chalk';
+import * as glob from 'glob';
 import * as _ from 'lodash';
-import { ExecOptions, env } from 'shelljs';
+import { ExecOptions } from 'shelljs';
 import { Color } from './enums';
 
 const config = require('../config/main.json');
@@ -12,10 +13,6 @@ export const logger = (text: string = '', color: Color = Color.Gray) => {
     console.log(chalk.yellow(`Color: '${color}' is not available for logging!`));
   }
 };
-
-export const log = () => {
-
-}
 
 const tab: string = '  ';
 const padding: number = _
@@ -51,6 +48,7 @@ export const help = () => {
 };
 
 export const echo = (cmd: string = '') => {
+  const env = require('shelljs').env;
   const vars = cmd.match(/\$[a-z0-9]+/ig);
   const options: ExecOptions = {
     silent: true,
@@ -60,7 +58,6 @@ export const echo = (cmd: string = '') => {
     vars.forEach(key => {
       const key$ = key.replace(/^\$/g, '');
       const value$ = env[key$];
-
       if(value$) {
         cmd = cmd.replace(key, value$);
       }
@@ -74,5 +71,8 @@ export const echo = (cmd: string = '') => {
     .replace(/\/\/+/g, '/')
     .replace(/\/$/g, '');
 
-  return cmd;
+  const paths = glob.sync(`${cmd}/`, { absolute: true });
+  const path = (paths.length ? paths[0] : null).replace(/\/$/, '');
+
+  return path;
 }

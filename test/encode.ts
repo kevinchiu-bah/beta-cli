@@ -1,7 +1,7 @@
 import test from 'ava';
 import { existsSync, statSync, unlinkSync } from 'fs';
 import { resolve } from 'path';
-import { Encode } from '../cli/encode';
+import { Encode } from '../src/encode';
 
 test.cb('Can auto encode to UTF-8 and sanitize', t => {
   const src = resolve('./test/resources/sample.ssa');
