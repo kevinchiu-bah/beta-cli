@@ -23,16 +23,15 @@
     "inquirer": "^5.2.0",
     "lodash": "^4.17.5",
     "shelljs": "^0.8.1",
-    "uchardet": "^1.6.1",
+    "ts-node": "^6.0.0",
+    "typescript": "^2.8.3",
+    "uchardet": "^1.6.5",
     "write-pkg": "^3.1.0"
   },
   "devDependencies": {
-    "ava": "^1.0.0-beta.3",
-    "ts-node": "^6.0.0",
-    "typescript": "^2.8.1"
+    "ava": "^1.0.0-beta.3"
   },
   "scripts": {
-    "sync": "npx ts-node ./runner sync",
     "test": "NODE_NO_WARNINGS=1 ava-ts -v",
     "test:watch": "NODE_NO_WARNINGS=1 ava-ts -- --watch -v",
     "start": "npx ts-node ./src"

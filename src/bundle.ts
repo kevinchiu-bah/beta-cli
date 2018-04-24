@@ -20,7 +20,6 @@ interface DependencyOptions {
   glob: any,
 };
 
-// const chalk: chalk = require('chalk');
 const mv = (source, target) => {
   renameSync(source, target);
   console.log(`${chalk.green('[Renaming]')} ${chalk.gray(source)} => ${chalk.cyan(target)}`);
@@ -141,7 +140,12 @@ export class Bundle {
       ext = extname(source);
       target = `${basePath}/${prefix}${ext}`;
       mv(source, target);
-      //Encode(target, locale);
+
+      try() {
+        Encode(target, locale);
+      } catch() {
+        // TODO
+      }
     });
 
     files = glob.sync('*.{mp4,avi,mkv}', params.glob);

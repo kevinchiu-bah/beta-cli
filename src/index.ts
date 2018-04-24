@@ -1,17 +1,16 @@
 #! /usr/bin/env node
-import * as clear from 'clear';
-import * as program from 'commander';
+import { default as clear } from 'clear';
+import { default as program } from 'commander';
 import * as figlet from 'figlet';
 import * as path from 'path';
 import * as process from 'process';
 import { Color } from './enums';
 import { logger, help } from './helpers';
-
 const config = require('../config/main.json');
 const settings = require('../package.json');
 
 program
-  .version(settings.version)
+  .version(settings.version, '-v, --version')
   .usage('<command>')
   .arguments('<command>')
   .action(command => {
@@ -21,11 +20,14 @@ program
       Color.Blue
     );
 
-    if(!config.commands[command] || command === 'help') {
-      help();
-    } else {
-      const fn = require(`./${command}`).default;
-      fn();
+    switch(command) {
+      case 'help':
+        help();
+        break;
+
+      default:
+        const fn = require(`./${command}`).default;
+        fn();
     }
   });
 
