@@ -9,28 +9,39 @@ import { logger, help } from './helpers';
 const config = require('../config/main.json');
 const settings = require('../package.json');
 
+const splash = () => {
+  clear();
+  logger(
+    figlet.textSync('B3T4-CLI', { horizontalLayout: 'fitted' }),
+    Color.Blue
+  );
+};
+
 program
   .version(settings.version, '-v, --version')
   .usage('<command>')
   .arguments('<command>')
   .action(command => {
-    clear();
-    logger(
-      figlet.textSync('B3T4-CLI', { horizontalLayout: 'fitted' }),
-      Color.Blue
-    );
+    splash();
 
     switch(command) {
-      case 'help':
-        help();
+      case 'bundle':
+      case 'encode':
+        const fn = require(`./${command}`).default;
+        fn();
         break;
 
       default:
-        const fn = require(`./${command}`).default;
-        fn();
+        help();
+        break;
     }
   });
 
 program.on('--help', () => help());
 
 program.parse(process.argv);
+
+if(!program.args.length) {
+  splash();
+  help();
+}

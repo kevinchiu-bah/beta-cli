@@ -1,3 +1,3 @@
-#!/usr/bin/env NODE_NO_WARNINGS=1 node
+#!/usr/bin/env node --no-warnings
 require('ts-node/register');
 require('./src');

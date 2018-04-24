@@ -141,9 +141,9 @@ export class Bundle {
       target = `${basePath}/${prefix}${ext}`;
       mv(source, target);
 
-      try() {
+      try {
         Encode(target, locale);
-      } catch() {
+      } catch(e) {
         // TODO
       }
     });
@@ -171,19 +171,19 @@ export class Bundle {
   }
 
   run() {
-    glob('*.{mp4,avi,mkv}', (error, files) => {
-      switch(files.length) {
-        case 0:
-        case 1:
-          console.log(`${chalk.cyan('\n[Bundle Type]')} Single`);
-          this._single();
-          break;
+    const files = glob.sync('*.{mp4,avi,mkv}');
 
-        default:
-          console.log(`${chalk.cyan('\n[Bundle Type]')} Multi`);
-          this._multi();
-      }
-    });
+    switch(files.length) {
+      case 0:
+      case 1:
+        console.log(`${chalk.cyan('\n[Bundle Type]')} Single`);
+        this._single();
+        break;
+
+      default:
+        console.log(`${chalk.cyan('\n[Bundle Type]')} Multi`);
+        this._multi();
+    }
   }
 };
 
