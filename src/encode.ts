@@ -1,16 +1,15 @@
 #! /usr/bin/env node
 import { default as chalk } from 'chalk';
 import { copyFileSync, createReadStream, createWriteStream, unlinkSync } from 'fs';
+import { default as fuzzy } from 'fuzzy';
 import * as glob from 'glob';
 import { Iconv } from 'iconv';
-import { prompt }from 'inquirer';
-import { indexOf, merge } from 'lodash';
+import { indexOf, merge, random } from 'lodash';
 import { extname } from 'path';
 import { exit } from 'process';
 import { echo } from './helpers';
 
 const uchardet = require('uchardet');
-const encodings = require('./config/encodings.json');
 
 const options = {
   fs: {
@@ -72,26 +71,42 @@ export const Encode = (src: string, locale: string = '', to: string = 'UTF-8', b
   });
 };
 
+const encodings = require('./config/encodings.json');
+
+const search = (answers, input: string = 'UTF-8') => new Promise(resolve => {
+  const fuzzyResult = fuzzy.filter(input, encodings);
+  const result = fuzzyResult.map(item => <string>item.original);
+  result.sort((a: string, b: string) => (a.length - b.length))
+
+  return resolve(input ? result : encodings.slice(0, 5));
+});
+
 const init =  () => {
-  prompt([
-    {
-      name: 'to',
-      message: 'Enter the encoding you would like to convert this to',
-      default: 'UTF-8',
-      validate: input => {
-        const index = indexOf(encodings, input.toUpperCase());
-        return (index == -1) ? `"${input.toUpperCase()}" is not valid encoding format` : true;
-      },
-      filter: input => input.toUpperCase(),
-      transformer: input => input.toUpperCase(),
-    },
+  const inquirer = require('inquirer');
+
+  inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'));
+
+  inquirer.prompt(<any>[
     {
       name: 'path',
       message: 'Enter the path to the file to be encoded',
       validate: input => !!(input || '').length,
     },
+    {
+      name: 'to',
+      type: 'autocomplete',
+      message: 'Enter the encoding you would like to convert this to',
+      default: 'UTF-8',
+      filter: input => input.toUpperCase(),
+      transformer: input => input.toUpperCase(),
+      source: search,
+      validate: input => {
+        const index = indexOf(encodings, input.toUpperCase());
+        return (index == -1) ? `"${input.toUpperCase()}" is not valid encoding format` : true;
+      },
+    },
   ])
-  .then(params => {
+  .then((params: any) => {
     let paths: Array<string>;
 
     params.path = echo(params.path);

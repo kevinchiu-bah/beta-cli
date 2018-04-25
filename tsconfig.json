@@ -14,6 +14,7 @@
     ],
     "module": "commonjs",
     "moduleResolution": "node",
+    "noErrorTruncation": true,
     "noImplicitAny": false,
     "strict": true,
     "strictNullChecks": false,

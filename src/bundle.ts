@@ -2,7 +2,6 @@
 import { default as chalk } from 'chalk';
 import { renameSync } from 'fs';
 import * as glob from 'glob';
-import { prompt }from 'inquirer';
 import { isNil, map, pick } from 'lodash';
 import { dirname, extname, resolve, join } from 'path';
 import { cwd, exit } from 'process';
@@ -191,7 +190,8 @@ export class Bundle {
  * Initializer/Bootstrap
  */
 const init = () => {
-  prompt([
+  const inquirer = require('inquirer');
+  inquirer.prompt([
     {
       name: 'prefix',
       message: 'Enter the name of your bundle',
@@ -208,7 +208,7 @@ const init = () => {
       default: 'en',
     }
   ])
-  .then(params => {
+  .then((params: any) => {
     let bundle: Bundle;
     let paths: Array<string>;
 

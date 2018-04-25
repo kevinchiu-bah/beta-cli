@@ -72,7 +72,7 @@ export const echo = (cmd: string = '') => {
     .replace(/\/$/g, '');
 
   const paths = glob.sync(`${cmd}/`, { absolute: true });
-  const path = (paths.length ? paths[0] : null).replace(/\/$/, '');
+  const path = (paths.length ? paths[0] : '').replace(/\/$/, '');
 
   return path;
 }

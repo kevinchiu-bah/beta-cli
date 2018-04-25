@@ -3,5 +3,5 @@ export = uchardet;
 declare function uchardet(filename: string): string;
 
 declare namespace uchardet {
-  export const version() : string;
+  export const version(): string;
 }
