@@ -8,9 +8,9 @@ import { indexOf, merge, random } from 'lodash';
 import { extname } from 'path';
 import { exit } from 'process';
 import { echo } from './helpers';
+import { prompt } from './prompts/encode';
 
 const uchardet = require('uchardet');
-
 const options = {
   fs: {
     bufferSize: 64,
@@ -38,6 +38,11 @@ export const Encode = (src: string, locale: string = '', to: string = 'UTF-8', b
     locale,
     backup,
   };
+
+  if(params.from && !params.from.length) {
+    cb();
+    return;
+  }
 
   const iconv = new Iconv(params.from, params.to);
   const ext = extname(src);
@@ -71,57 +76,25 @@ export const Encode = (src: string, locale: string = '', to: string = 'UTF-8', b
   });
 };
 
-const encodings = require('./config/encodings.json');
-
-const search = (answers, input: string = 'UTF-8') => new Promise(resolve => {
-  const fuzzyResult = fuzzy.filter(input, encodings);
-  const result = fuzzyResult.map(item => <string>item.original);
-  result.sort((a: string, b: string) => (a.length - b.length))
-
-  return resolve(input ? result : encodings.slice(0, 5));
-});
-
 const init =  () => {
-  const inquirer = require('inquirer');
+  prompt
+    .ask(prompt.queue)
+    .then((params: any) => {
+      let paths: Array<string>;
 
-  inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'));
+      params.path = echo(params.path);
 
-  inquirer.prompt(<any>[
-    {
-      name: 'path',
-      message: 'Enter the path to the file to be encoded',
-      validate: input => !!(input || '').length,
-    },
-    {
-      name: 'to',
-      type: 'autocomplete',
-      message: 'Enter the encoding you would like to convert this to',
-      default: 'UTF-8',
-      filter: input => input.toUpperCase(),
-      transformer: input => input.toUpperCase(),
-      source: search,
-      validate: input => {
-        const index = indexOf(encodings, input.toUpperCase());
-        return (index == -1) ? `"${input.toUpperCase()}" is not valid encoding format` : true;
-      },
-    },
-  ])
-  .then((params: any) => {
-    let paths: Array<string>;
-
-    params.path = echo(params.path);
-
-    if(params.paths) {
-      Encode(params.path, '', params.to, true);
-    } else {
-      console.log([
-        chalk.red('[Error]'),
-        `Could not locate file at ${params.path}!`,
-        chalk.yellow('Aborting'),
-      ].join(' '));
-      exit();
-    }
-   })
+      if(params.paths) {
+        Encode(params.path, '', params.to, true);
+      } else {
+        console.log([
+          chalk.red('[Error]'),
+          `Could not locate file at ${params.path}!`,
+          chalk.yellow('Aborting'),
+        ].join(' '));
+        exit();
+      }
+    })
    .catch((e) => {
      console.log(e);
    });

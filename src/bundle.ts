@@ -8,6 +8,7 @@ import { cwd, exit } from 'process';
 import { exec, ls } from 'shelljs';
 import { echo } from './helpers';
 import { Encode } from './encode';
+import { prompt } from './prompts/bundle';
 
 interface Options {
   prefix?: string;
@@ -190,45 +191,29 @@ export class Bundle {
  * Initializer/Bootstrap
  */
 const init = () => {
-  const inquirer = require('inquirer');
-  inquirer.prompt([
-    {
-      name: 'prefix',
-      message: 'Enter the name of your bundle',
-      default: 'The.Bundle',
-    },
-    {
-      name: 'path',
-      message: 'Enter the path to your bundle [directory]',
-      validate: input => !!(input || '').length,
-    },
-    {
-      name: 'locale',
-      message: 'Enter the language suffix or your srt',
-      default: 'en',
-    }
-  ])
-  .then((params: any) => {
-    let bundle: Bundle;
-    let paths: Array<string>;
+  prompt
+    .ask(prompt.queue)
+    .then((params: any) => {
+      let bundle: Bundle;
+      let paths: Array<string>;
 
-    params.path = echo(params.path);
+      params.path = echo(params.path);
 
-    if(params.path) {
-      bundle = new Bundle(params.path, params.prefix, params.locale);
-      bundle.run();
-    } else {
-      console.log([
-        chalk.red('[Error]'),
-        `${params.path} is not or does not contain any valid directories!`,
-        chalk.yellow('Aborting'),
-      ].join(' '));
-      exit();
-    }
-   })
-   .catch((e) => {
-     console.log(e);
-   });
+      if(params.path) {
+        bundle = new Bundle(params.path, params.prefix, params.locale);
+        bundle.run();
+      } else {
+        console.log([
+          chalk.red('[Error]'),
+          `${params.path} is not or does not contain any valid directories!`,
+          chalk.yellow('Aborting'),
+        ].join(' '));
+        exit();
+      }
+     })
+     .catch((e) => {
+       console.log(e);
+     });
 };
 
 export default init;

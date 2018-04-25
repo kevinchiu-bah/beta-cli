@@ -1,3 +1,5 @@
+// Type definitions for fuzzy
+// Definitions by: Kevin Chiu <https:https://github.com/icemanbeta>
 /// <reference types="fuzzy" />
 
 export = fuzzy;
