@@ -31,9 +31,24 @@ const error = (name) => {
   exit(1);
 };
 
+const detect = (src: string) => {
+  let charset = null;
+
+  try {
+    charset = uchardet(src)
+  } catch(e) {
+    // Try one more time, weird OSX glitch
+    charset = detect(src);
+  }
+
+  return charset;
+}
+
 export const Encode = (src: string, locale: string = '', to: string = 'UTF-8', backup: boolean = false, cb: Function = () => {}) => {
+  let from;
+
   const params = {
-    from: uchardet(src),
+    from: detect(src),
     to,
     locale,
     backup,

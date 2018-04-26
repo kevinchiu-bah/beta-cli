@@ -1,5 +1,7 @@
 import { default as chalk } from 'chalk';
+import { default as franc } from 'franc';
 import * as glob from 'glob';
+import { default as Langs } from 'langs';
 import * as _ from 'lodash';
 import { ExecOptions } from 'shelljs';
 import { Color } from './enums';
@@ -75,4 +77,18 @@ export const echo = (cmd: string = '') => {
   const path = (paths.length ? paths[0] : '').replace(/\/$/, '');
 
   return path;
-}
+};
+
+export const detectLocale = (content: string): string => {
+  const franc = require('franc');
+  const iso = franc(content);
+  const lang = Langs.where('3', iso);
+
+  let locale = null;
+
+  if(lang) {
+    locale = lang['1'];
+  }
+
+  return locale;
+};

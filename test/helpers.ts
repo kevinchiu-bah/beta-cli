@@ -4,7 +4,7 @@ import { head, map } from 'lodash';
 import { resolve } from 'path';
 import { cwd } from 'process';
 import { exec, env } from 'shelljs';
-import { echo } from '../src/helpers';
+import { detectLocale, echo } from '../src/helpers';
 
 const testDir = resolve(cwd(), './test/resources');
 env['TEST'] = testDir;
@@ -21,7 +21,7 @@ test('echo() - Evaluates absolute paths', t => {
 
   t.plan(2);
 
-  map(paths, (path) => {
+  map(paths, path => {
     path = echo(path);
     t.is(path, `${env['TEST']}/test`);
   });
@@ -35,9 +35,22 @@ test('echo() - Evaluates relative paths', t => {
 
   t.plan(2);
 
-  map(paths, (path) => {
+  map(paths, path => {
     path = echo(path);
     t.is(path, `${env['TEST']}/test`);
+  });
+});
+
+test('detectLocale() - Verify string detection to return language locale code is working', t => {
+  const samples = {
+    'en': 'This is the first language to test',
+    'th': 'พวกเราเราอยู่ท่ามกลางเหล่าคนตาย',
+  };
+
+  t.plan(2);
+
+  map(samples, (sample, locale) => {
+    t.is(locale, detectLocale(sample));
   });
 });
 
