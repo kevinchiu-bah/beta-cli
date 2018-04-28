@@ -12,11 +12,6 @@ const questions = [
     message: 'Enter the path to your bundle [directory]',
     validate: input => !!(input || '').length,
   },
-  {
-    name: 'locale',
-    message: 'Enter the language suffix or your srt',
-    default: 'en',
-  },
 ];
 
 const prompt = new Enquirer();

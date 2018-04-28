@@ -1,6 +1,6 @@
 import anyTest, { TestInterface } from 'ava';
-import { map, merge } from 'lodash';
-import { Bundle } from '../src/bundle';
+import { keys, map, merge } from 'lodash';
+import { Bundle, getKey } from '../src/bundle';
 
 interface Context {
   bundle?: Bundle
@@ -24,7 +24,7 @@ test('Evaluates relative paths', t => {
     '../': `/var`,
   };
 
-  t.plan(4);
+  t.plan(keys(paths).length);
 
   map(paths, (resolved, path) => {
     path = bundle.resolve(path);
@@ -39,10 +39,33 @@ test('Evaluates absolute paths', t => {
     '/usr/local': '/usr/local',
   };
 
-  t.plan(2);
+  t.plan(keys(paths).length);
 
   map(paths, (resolved, path) => {
     path = bundle.resolve(path);
     t.is(path, resolved);
   });
 });
+
+test('getKey() - Verifies key extraction', t => {
+  const samples = [
+    'testS01E02.ext',
+    'testS1E2.ext',
+    'testS01.E02.ext',
+    'testS01_E02.ext',
+    'testS01xE02.ext',
+    'test1x02.ext',
+    'test102.ext',
+  ];
+
+  let key;
+
+  t.plan(samples.length);
+
+  map(samples, sample => {
+    key = getKey(sample);
+    t.is(key, 'S01E02');
+  });
+});
+
+test.todo('Can properly bundle and encode multiple subtitles');

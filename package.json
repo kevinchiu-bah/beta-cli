@@ -30,7 +30,7 @@
     "shelljs": "^0.8.1",
     "ts-node": "^6.0.0",
     "typescript": "^2.8.3",
-    "uchardet": "^1.6.5",
+    "uchardet": "^1.6.6",
     "write-pkg": "^3.1.0"
   },
   "devDependencies": {
@@ -38,10 +38,10 @@
     "ava-ts": "^0.24.3"
   },
   "scripts": {
-    "test": "NODE_NO_WARNINGS=1 ava-ts",
-    "test:bundle": "NODE_NO_WARNINGS=1 ava-ts --files='test/bundle*'",
-    "test:encode": "NODE_NO_WARNINGS=1 ava-ts --files='test/encode*'",
-    "test:helpers": "NODE_NO_WARNINGS=1 ava-ts --files='test/helpers*'",
+    "test": "ava-ts",
+    "test:bundle": "ava-ts --files='test/bundle*'",
+    "test:encode": "ava-ts --files='test/encode*'",
+    "test:helpers": "ava-ts --files='test/helpers*'",
     "start": "./index.js"
   },
   "bin": {

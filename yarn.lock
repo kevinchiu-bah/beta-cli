@@ -3275,7 +3275,7 @@ n-gram@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/n-gram/-/n-gram-1.0.1.tgz#d29a465e4debcff7f9eed9fb57d9da6c806f4112"
 
-nan@^2.3.0, nan@^2.3.5, nan@^2.9.2:
+nan@^2.10.0, nan@^2.3.0, nan@^2.3.5, nan@^2.9.2:
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.10.0.tgz#96d0cd610ebd58d4b4de9cc0c6828cda99c7548f"
 
@@ -4262,8 +4262,8 @@ rimraf@2, rimraf@^2.5.1, rimraf@^2.6.1:
     glob "^7.0.5"
 
 safe-buffer@^5.0.1, safe-buffer@^5.1.1, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
 
 safe-regex@^1.1.0:
   version "1.1.0"
@@ -4833,11 +4833,12 @@ typescript@^2.8.3:
   version "2.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.8.3.tgz#5d817f9b6f31bb871835f4edf0089f21abe6c170"
 
-uchardet@^1.6.5:
-  version "1.6.5"
-  resolved "https://registry.yarnpkg.com/uchardet/-/uchardet-1.6.5.tgz#8d5b9892694e09473ac45f4df5d05f0bc46a91a0"
+uchardet@^1.6.6:
+  version "1.6.6"
+  resolved "https://registry.yarnpkg.com/uchardet/-/uchardet-1.6.6.tgz#8aa2033affe8e8531c27077bdb401a43ef865969"
   dependencies:
     bindings "^1.3.0"
+    nan "^2.10.0"
     node-addon-api "^1.2.0"
     node-gyp "^3.6.2"
 

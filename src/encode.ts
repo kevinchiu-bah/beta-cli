@@ -1,17 +1,20 @@
 #! /usr/bin/env node
+// import { Buffer } from 'buffer';
 import { default as chalk } from 'chalk';
-import { copyFileSync, createReadStream, createWriteStream, unlinkSync } from 'fs';
+import { copyFileSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { default as fuzzy } from 'fuzzy';
 import * as glob from 'glob';
 import { Iconv } from 'iconv';
 import { indexOf, merge, random } from 'lodash';
-import { extname } from 'path';
+import { extname, join } from 'path';
 import { exit } from 'process';
-import { echo } from './helpers';
+import { default as Uchardet } from 'uchardet';
+
+import { detectLocale, echo } from './helpers';
 import { prompt } from './prompts/encode';
 
-const uchardet = require('uchardet');
-const options = {
+const uchardet = new Uchardet();
+const params = {
   fs: {
     bufferSize: 64,
     lowWaterMark: 0,
@@ -44,51 +47,42 @@ const detect = (src: string) => {
   return charset;
 }
 
-export const Encode = (src: string, locale: string = '', to: string = 'UTF-8', backup: boolean = false, cb: Function = () => {}) => {
-  let from;
+const defaults = {
+  to: 'UTF-8',
+  backup: false,
+}
 
-  const params = {
-    from: detect(src),
-    to,
-    locale,
-    backup,
-  };
+export const Encode = (src: string, options: any = {}) => {
+  options = merge({
+    from: uchardet.detect(src)
+  }, defaults, options);
 
-  if(params.from && !params.from.length) {
-    cb();
+  // Verify detection
+  if(options.from && !options.from.length) {
     return;
   }
 
-  const iconv = new Iconv(params.from, params.to);
-  const ext = extname(src);
+  const iconv = new Iconv(options.from, options.to);
+  const backup = `${src}.backup`;
 
-  const backupSrc = src
-    .replace(ext, `.backup${ext}`)
-    .replace(/\.\.+/, '.');
+  // Create copy
+  if(options.backup) {
+    copyFileSync(src, backup);
+    console.log(`${chalk.cyan('[Backup]')} ${chalk.gray(src)} => ${chalk.green(backup)}`);
+  }
 
-  // Create Backup
-  copyFileSync(src, backupSrc);
+  // Read, Encode, and Write
+  const input = readFileSync(backup);
+  const output = iconv.convert(input).toString('utf8');
+  const sample = output.replace(/[0-9:a-z,=]/gi, '');
 
-  const target = src
-    .replace(ext, `.${params.locale}${ext}`)
-    .replace(/\.\.+/, '.');
+  const locale = detectLocale(sample);
 
-  const input = createReadStream(backupSrc, options.fs);
-  const output = createWriteStream(target, { autoClose: true });
+  writeFileSync(src, output);
 
-  input.pipe(iconv).pipe(output);
+  console.log(`${chalk.green('[Processed]')} ${chalk.cyan(src)}`);
 
-  console.log(`${chalk.green('[Encode]')} ${chalk.gray(src)} => ${chalk.cyan(target)}`);
-
-  output.on('finish', () => {
-    if(params.backup) {
-      console.log(`${chalk.green('[Deleting]')} ${chalk.red(backupSrc)}`);
-      unlinkSync(backupSrc);
-      cb();
-    } else {
-      cb();
-    }
-  });
+  return locale;
 };
 
 const init =  () => {
@@ -100,7 +94,10 @@ const init =  () => {
       params.path = echo(params.path);
 
       if(params.paths) {
-        Encode(params.path, '', params.to, true);
+        Encode(params.path, {
+          to: params.to,
+          backup: true,
+        });
       } else {
         console.log([
           chalk.red('[Error]'),
