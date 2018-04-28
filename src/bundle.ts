@@ -3,7 +3,7 @@ import { default as chalk } from 'chalk';
 import { renameSync } from 'fs';
 import * as glob from 'glob';
 import { isNil, map, pick } from 'lodash';
-import { dirname, extname, isAbsolute, join, resolve } from 'path';
+import { dirname, extname, isAbsolute, join, normalize,   resolve } from 'path';
 import { cwd, exit } from 'process';
 import { exec, ls } from 'shelljs';
 import { echo } from './helpers';
@@ -90,11 +90,12 @@ export class Bundle {
       paths.pop();
       paths.push(to);
 
-      to = join.apply(paths);
+      to = paths.join('/');
+      to = normalize(to);
     }
 
     renameSync(from, to);
-    console.log(`${chalk.green('[Renaming]')} ${chalk.gray(from)} => ${chalk.cyan(to)}`);
+    console.log(`${chalk.green('[Renaming]')} ${chalk.white(from)} => ${chalk.cyan(to)}`);
 
     return to;
   }
@@ -175,19 +176,19 @@ export class Bundle {
     }
 
     args.push(ext);
-    to = args.join('.');
+    to = args.join('');
 
     return this._mv(from, to);
   }
 
-  _single() {
+  _single(cb: Function = () => {}) {
     const params = this.params;
     const name = this.prefix;
     const rootPath = this.source;
 
     let files;
 
-    console.log(`${chalk.cyan('\n[Bundle Type]')} Single`);
+    console.log(`${chalk.bgYellow('\n[Bundle Type]')} Single`);
 
     /**
      * Cover
@@ -222,16 +223,18 @@ export class Bundle {
      * Finalize
      */
     this._mv(rootPath, name);
+
+    cb();
   }
 
-  _multi() {
+  _multiple(cb: Function = () => {}) {
     const params = this.params;
     const name = this.prefix;
     const rootPath = this.source;
 
     let files;
 
-    console.log(`${chalk.cyan('\n[Bundle Type]')} Multi`);
+    console.log(`${chalk.bgYellow('\n[Bundle Type]')} Multiple`);
 
     /**
      * Cover
@@ -280,19 +283,21 @@ export class Bundle {
      * Finalize
      */
     this._mv(rootPath, name);
+
+    cb();
   }
 
-  run() {
-    const files = glob.sync('*.{mp4,avi,mkv}');
+  run(cb: Function = () => {}) {
+    const files = glob.sync('*.{mp4,avi,mkv}', this.params.glob);
 
     switch(files.length) {
       case 0:
       case 1:
-        this._single();
+        this._single(cb);
         break;
 
       default:
-        this._multi();
+        this._multiple(cb);
     }
   }
 };

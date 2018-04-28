@@ -35,13 +35,11 @@
   },
   "devDependencies": {
     "ava": "^1.0.0-beta.3",
-    "ava-ts": "^0.24.3"
+    "ava-ts": "^0.24.3",
+    "mock-fs": "^4.4.2"
   },
   "scripts": {
-    "test": "ava-ts",
-    "test:bundle": "ava-ts --files='test/bundle*'",
-    "test:encode": "ava-ts --files='test/encode*'",
-    "test:helpers": "ava-ts --files='test/helpers*'",
+    "test": "scripts/test.sh",
     "start": "./index.js"
   },
   "bin": {

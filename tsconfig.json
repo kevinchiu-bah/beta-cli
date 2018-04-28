@@ -18,9 +18,9 @@
     "noErrorTruncation": true,
     "noImplicitAny": false,
     "paths": {
-      "@config/*": ["config/*","src/config/*"],
-      "@src/*": ["src/*"],
-      "@resources/*": ["test/resources/*"],
+      "config/*": ["config/*","src/config/*"],
+      "src/*": ["src/*"],
+      "resources/*": ["test/resources/*"],
     },
     "strict": true,
     "strictNullChecks": false,

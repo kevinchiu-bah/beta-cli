@@ -68,7 +68,7 @@ export const Encode = (src: string, options: any = {}) => {
   // Create copy
   if(options.backup) {
     copyFileSync(src, backup);
-    console.log(`${chalk.cyan('[Backup]')} ${chalk.gray(src)} => ${chalk.green(backup)}`);
+    console.log(`${chalk.cyan('[Backup]')} ${chalk.white(src)} => ${chalk.green(backup)}`);
   }
 
   // Read, Encode, and Write
