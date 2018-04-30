@@ -4837,9 +4837,9 @@ typescript@^2.8.3:
   version "2.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.8.3.tgz#5d817f9b6f31bb871835f4edf0089f21abe6c170"
 
-uchardet@^1.6.6:
-  version "1.6.6"
-  resolved "https://registry.yarnpkg.com/uchardet/-/uchardet-1.6.6.tgz#8aa2033affe8e8531c27077bdb401a43ef865969"
+uchardet@^1.6.7:
+  version "1.6.7"
+  resolved "https://registry.yarnpkg.com/uchardet/-/uchardet-1.6.7.tgz#0a7e958c2137074740d618f9ca148ad23686d9e2"
   dependencies:
     bindings "^1.3.0"
     nan "^2.10.0"

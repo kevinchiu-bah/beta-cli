@@ -30,7 +30,7 @@
     "shelljs": "^0.8.1",
     "ts-node": "^6.0.0",
     "typescript": "^2.8.3",
-    "uchardet": "^1.6.6",
+    "uchardet": "^1.6.7",
     "write-pkg": "^3.1.0"
   },
   "devDependencies": {

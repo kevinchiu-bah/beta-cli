@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 // import { Buffer } from 'buffer';
 import { default as chalk } from 'chalk';
-import { copyFileSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
+import { copyFileSync, existsSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { default as fuzzy } from 'fuzzy';
 import * as glob from 'glob';
 import { Iconv } from 'iconv';
@@ -13,7 +13,6 @@ import { default as Uchardet } from 'uchardet';
 import { detectLocale, echo } from './helpers';
 import { prompt } from './prompts/encode';
 
-const uchardet = new Uchardet();
 const params = {
   fs: {
     bufferSize: 64,
@@ -35,13 +34,14 @@ const error = (name) => {
 };
 
 const detect = (src: string) => {
+  const uchardet = new Uchardet();
   let charset = null;
 
   try {
-    charset = uchardet(src)
+    charset = uchardet.detect(src)
   } catch(e) {
     // Try one more time, weird OSX glitch
-    charset = detect(src);
+    charset = uchardet.detect(src);
   }
 
   return charset;
@@ -54,28 +54,29 @@ const defaults = {
 
 export const Encode = (src: string, options: any = {}) => {
   options = merge({
-    from: uchardet.detect(src)
+    from: detect(src)
   }, defaults, options);
 
-  // Verify detection
-  if(options.from && !options.from.length) {
-    return;
-  }
-
-  const iconv = new Iconv(options.from, options.to);
+  // Read
+  const input = readFileSync(src);
   const backup = `${src}.backup`;
 
-  // Create copy
+  // Backup
   if(options.backup) {
-    copyFileSync(src, backup);
+    writeFileSync(backup, input);
     console.log(`${chalk.cyan('[Backup]')} ${chalk.white(src)} => ${chalk.green(backup)}`);
   }
 
+  // Verify detection
+  if(!(options.from || '').length) {
+    return;
+  }
+
+  const iconv = new Iconv(options.from, `${options.to}//IGNORE`);
+
   // Read, Encode, and Write
-  const input = readFileSync(backup);
   const output = iconv.convert(input).toString('utf8');
   const sample = output.replace(/[0-9:a-z,=]/gi, '');
-
   const locale = detectLocale(sample);
 
   writeFileSync(src, output);

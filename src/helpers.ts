@@ -80,7 +80,6 @@ export const echo = (cmd: string = '') => {
 };
 
 export const detectLocale = (content: string): string => {
-  const franc = require('franc');
   const iso = franc(content);
   const lang = Langs.where('3', iso);
 
