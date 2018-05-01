@@ -4,7 +4,7 @@ import mockFs from 'mock-fs';
 import { resolve } from 'path';
 import { Encode } from '../src/encode';
 
-test.cb.skip('Can auto encode to UTF-8 and sanitize', t => {
+test.cb('Can auto encode to UTF-8 and sanitize', t => {
   const src = resolve('./test/resources/sample.ssa');
   const target = resolve('./test/resources/sample.ssa.backup');
 
