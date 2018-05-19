@@ -1,5 +1,5 @@
 import anyTest, { TestInterface } from 'ava';
-import { readdirSync, statSync }  from 'fs';
+import { readdirSync, readFileSync, statSync }  from 'fs';
 import { keys, map, merge } from 'lodash';
 import mockFs from 'mock-fs';
 import { resolve } from 'path';
@@ -117,6 +117,62 @@ test('Can properly [multiple] bundle the whole nine yards', t => {
           t.true(regex.test(file), `Match Error [${pattern}] => ${file}`);
         });
 
+        mockFs.restore();
+      } else {
+        mockFs.restore();
+        t.fail("There's an issue with the final directory output");
+      }
+    });
+  } catch (e) {
+    mockFs.restore();
+    t.fail();
+    console.error(e);
+  }
+});
+
+test('Can properly [single] bundle the whole nine yards', t => {
+  const baseDir = 'test/resources';
+  const path = resolve(`${baseDir}/tmp-bundle`);
+  const prefix = 'The.Bundle';
+  const subtitle = readFileSync(resolve('test/resources/sample.ssa'));
+  const files = {
+    'test.mp4': '',
+    'media.jpg': '',
+    'test.srt': subtitle,
+  };
+ 
+  const config = {
+    'test/resources/tmp-bundle' : files,
+  };
+ 
+  /**
+   * Filesystem logic
+   */
+  mockFs(config);
+ 
+  const bundle = new Bundle(path, prefix);
+ 
+  /**
+   * Assertions
+   */
+  try {
+    bundle.run(() => {
+      const directory = resolve(`${baseDir}/${prefix}`);
+ 
+      // Verify directory rename
+      if(statSync(directory).isDirectory()) {
+        const tree = readdirSync(directory);
+        const pattern = (`^(${prefix}|cover)(.[a-z]+)?.[a-z0-4]+$`)
+                          .replace(/[.]/g, '\\.');
+        const regex = new RegExp(pattern);
+ 
+        // Verify files rename
+        t.plan(keys(files).length);
+ 
+        map(tree, file => {
+          t.true(regex.test(file), `Match Error[${pattern}] => ${file}`);
+        });
+ 
         mockFs.restore();
       } else {
         mockFs.restore();

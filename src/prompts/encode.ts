@@ -1,5 +1,5 @@
 import { default as Enquirer } from 'enquirer';
-import { default as fuzzy } from 'fuzzy';
+import * as fuzzy from 'fuzzy';
 import { default as Autocomplete } from 'prompt-autocompletion';
 import { default as Input } from 'prompt-input';
 

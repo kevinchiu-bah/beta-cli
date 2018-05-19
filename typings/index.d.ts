@@ -18,3 +18,5 @@ declare namespace Printer {
     footer: Message;
   }
 }
+
+declare var Promise: any;

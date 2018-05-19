@@ -1,8 +1,6 @@
 #! /usr/bin/env node
-// import { Buffer } from 'buffer';
 import { default as chalk } from 'chalk';
-import { copyFileSync, existsSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
-import { default as fuzzy } from 'fuzzy';
+import { copyFileSync, existsSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from 'fs'
 import * as glob from 'glob';
 import { Iconv } from 'iconv';
 import { indexOf, merge, random } from 'lodash';
@@ -69,7 +67,7 @@ export const Encode = (src: string, options: any = {}) => {
 
   // Verify detection
   if(!(options.from || '').length) {
-    return;
+    return 'en';
   }
 
   const iconv = new Iconv(options.from, `${options.to}//IGNORE`);

@@ -193,7 +193,7 @@ export class Bundle {
     /**
      * Cover
      */
-    files = glob.sync('*.{jpg,jpeg.png}', params.glob);
+    files = glob.sync('*.{jpg,jpeg,png}', params.glob);
     files.forEach(source => {
       this.rename(source, 'cover');
     });
