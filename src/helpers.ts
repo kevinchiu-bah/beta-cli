@@ -24,7 +24,7 @@ const padding: number = _
   .reduce((a: number, b: number) => Math.max(a, b))
   .value() + tab.length;
 
-const pad = (text: string = '') => `${text}${' '.repeat(padding - text.length)}${tab.repeat(2)}`;
+const pad = (text: string = '') => `${text}${_.repeat(' ', (padding - text.length))}${_.repeat(tab, 2)}`;
 
 export const help = () => {
   const output = [
@@ -33,15 +33,15 @@ export const help = () => {
     null,
     `${tab}Options:`,
     null,
-    `${tab.repeat(2)}-V, --version  output the version number`,
-    `${tab.repeat(2)}-h, --help     output usage information`,
+    `${_.repeat(tab, 2)}-V, --version  output the version number`,
+    `${_.repeat(tab, 2)}-h, --help     output usage information`,
     null,
     `${tab}Commands:`,
     null,
   ];
 
   _.map(config.commands, (description, command) => {
-    output.push(`${tab.repeat(2)}${pad(command)}${description}`);
+    output.push(`${_.repeat(tab, 2)}${pad(command)}${description}`);
   });
 
   return console.log(

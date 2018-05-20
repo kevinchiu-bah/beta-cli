@@ -26,10 +26,6 @@ const questions = [
     filter: input => input.toUpperCase(),
     transformer: input => input.toUpperCase(),
     source: search,
-    // validate: input => {
-    //   const index = indexOf(encodings, input.toUpperCase());
-    //   return (index == -1) ? `"${input.toUpperCase()}" is not valid encoding format` : true;
-    // },
   },
 ];
 
