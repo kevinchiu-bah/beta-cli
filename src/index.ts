@@ -1,6 +1,6 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 import { default as clear } from 'clear';
-import * as program from 'commander';
+import { default as program } from 'commander';
 import * as figlet from 'figlet';
 import * as path from 'path';
 import * as process from 'process';
