@@ -83,7 +83,7 @@ export const detectLocale = (content: string): string => {
   const iso = franc(content);
   const lang = Langs.where('3', iso);
 
-  let locale = null;
+  let locale = 'en';
 
   if(lang) {
     locale = lang['1'];
