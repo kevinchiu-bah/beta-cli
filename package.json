@@ -8,6 +8,9 @@
   "license": "MIT",
   "private": false,
   "gypfile": true,
+  "engines": {
+    "node": "<=11.0.0"
+  },
   "dependencies": {
     "@types/es6-shim": "^0.31.36",
     "@types/glob": "^7.1.1",
@@ -16,8 +19,8 @@
     "@types/shelljs": "^0.8.5",
     "chalk": "^2.3.2",
     "clear": "^0.1.0",
-    "commander": "^3.0.0",
-    "enquirer": "^2.3.1",
+    "commander": "^2",
+    "enquirer": "^1",
     "figlet": "^1.2.0",
     "franc": "^4.1.0",
     "fuzzy": "^0.1.3",

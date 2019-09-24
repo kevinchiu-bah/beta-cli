@@ -1,5 +1,5 @@
-#!/bin/sh
-":" //# comment; exec /usr/bin/env node --no-warnings "$0" "$@"
+#!/data/data/com.termux/files/usr/bin/env node
+":" //# comment; exec data/data/com.termux/files/usr/bin/env node --no-warnings "$0" "$@"
 const tsconfig = {
   project: __dirname + '/tsconfig.json'
 };
