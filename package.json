@@ -30,7 +30,7 @@
     "lodash": "^4.17.5",
     "prompt-autocompletion": "^0.1.2",
     "prompt-input": "^3.0.0",
-    "shelljs": "^0.8.1",
+    "shelljs": "^0.8.5",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3",
     "uchardet": "^1.7.4",
